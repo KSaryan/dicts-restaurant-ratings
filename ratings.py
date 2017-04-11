@@ -7,7 +7,32 @@ def print_ratings(ratings_dict):
     print '\n'
 
 
-def add_ratings(score_file):
+def add_ratings(input_dict):
+    """Adds/updates restaurants and ratings"""
+
+    new_restaurant = raw_input("Enter a new restaurant: ")
+
+    while True:
+        new_rating = raw_input("Enter a rating for that restaurant: ")
+
+        try:
+            if int(new_rating) >= 1 and int(new_rating) <= 5:
+                break
+            else:
+                print ("That is not a valid rating, please enter a rating "
+                      "between 1 and 5")
+
+        except ValueError:
+            print ("That is not a valid rating, please enter a number in"
+                   "between 1 and 5!!!!!")
+
+    input_dict[new_restaurant] = new_rating
+    print '\n'
+    
+    return input_dict
+
+
+def view_ratings(score_file):
     """Adding new items to dictionary of restaurants and ratings"""
 
     result = {}
@@ -18,33 +43,22 @@ def add_ratings(score_file):
         restaurant, rating = line.rstrip().split(':')
         result[restaurant] = rating
 
-    print_ratings(result)
-
     while True:
-        new_restaurant = raw_input("Enter a new restaurant: ")
+        print ("Enter 1 to print restaurant list\nEnter 2 to add a new "
+               "restaurant or update its rating\nEnter 3 to quit")
+        user_choice = raw_input("Enter choice: ")
 
-        while True:
-            new_rating = raw_input("Enter a rating for that restaurant: ")
-       
-            try:
-                if int(new_rating) >= 1 and int(new_rating) <= 5:
-                    break
-                else:
-                    print ("That is not a valid rating, please enter a rating "
-                          "between 1 and 5")
-            except ValueError:
-                print ("That is not a valid rating, please enter a number in"
-                       "between 1 and 5!!!!!")
-
-        result[new_restaurant] = new_rating
-
-        print_ratings(result)
-
-        add_another = raw_input("Do you want to add another? y/n: ")
-
-        if add_another.lower() == "n" or add_another.lower() == "no":
+        if user_choice == '1':
+            print "\n"
+            print_ratings(result)
+        elif user_choice == '2':
+            add_ratings(result)
+        elif user_choice == '3':
+            print "Thank you for visiting!"
             break
+        else:
+            print "Not a valid input. Choose 1, 2, or 3."
 
     scores.close()
 
-add_ratings('scores.txt')
+view_ratings('scores.txt')
